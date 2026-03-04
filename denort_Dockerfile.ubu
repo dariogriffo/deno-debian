@@ -1,0 +1,30 @@
+ARG UBUNTU_DIST=noble
+FROM ubuntu:$UBUNTU_DIST
+
+ARG DENO_VERSION
+ARG UBUNTU_DIST
+ARG BUILD_VERSION
+ARG FULL_VERSION
+ARG ARCH
+
+RUN mkdir -p /output/usr/bin
+RUN mkdir -p /output/DEBIAN
+RUN mkdir -p /output/usr/share/doc/denort/
+
+COPY denort /output/usr/bin/denort
+
+COPY packages/denort/output/DEBIAN/control /output/DEBIAN/
+COPY packages/denort/output/changelog.Debian /output/usr/share/doc/denort/
+COPY packages/denort/output/copyright /output/usr/share/doc/denort/
+
+RUN sed -i "s/DIST/$UBUNTU_DIST/" /output/usr/share/doc/denort/changelog.Debian
+RUN sed -i "s/BUILD_VERSION/$BUILD_VERSION/" /output/usr/share/doc/denort/changelog.Debian
+RUN sed -i "s/DENO_VERSION/$DENO_VERSION/" /output/usr/share/doc/denort/changelog.Debian
+
+RUN sed -i "s/DIST/$UBUNTU_DIST/" /output/DEBIAN/control
+RUN sed -i "s/BUILD_VERSION/$BUILD_VERSION/" /output/DEBIAN/control
+RUN sed -i "s/DENO_VERSION/$DENO_VERSION/" /output/DEBIAN/control
+RUN sed -i "s/SUPPORTED_ARCHITECTURES/$ARCH/" /output/DEBIAN/control
+
+RUN chmod 755 /output/usr/bin/denort
+RUN dpkg-deb --build /output /denort_${FULL_VERSION}.deb

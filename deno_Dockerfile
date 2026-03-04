@@ -1,0 +1,30 @@
+ARG DEBIAN_DIST=bookworm
+FROM debian:$DEBIAN_DIST
+
+ARG DENO_VERSION
+ARG DEBIAN_DIST
+ARG BUILD_VERSION
+ARG FULL_VERSION
+ARG ARCH
+
+RUN mkdir -p /output/usr/bin
+RUN mkdir -p /output/DEBIAN
+RUN mkdir -p /output/usr/share/doc/deno/
+
+COPY deno /output/usr/bin/deno
+
+COPY packages/deno/output/DEBIAN/control /output/DEBIAN/
+COPY packages/deno/output/changelog.Debian /output/usr/share/doc/deno/
+COPY packages/deno/output/copyright /output/usr/share/doc/deno/
+
+RUN sed -i "s/DIST/$DEBIAN_DIST/" /output/usr/share/doc/deno/changelog.Debian
+RUN sed -i "s/BUILD_VERSION/$BUILD_VERSION/" /output/usr/share/doc/deno/changelog.Debian
+RUN sed -i "s/DENO_VERSION/$DENO_VERSION/" /output/usr/share/doc/deno/changelog.Debian
+
+RUN sed -i "s/DIST/$DEBIAN_DIST/" /output/DEBIAN/control
+RUN sed -i "s/BUILD_VERSION/$BUILD_VERSION/" /output/DEBIAN/control
+RUN sed -i "s/DENO_VERSION/$DENO_VERSION/" /output/DEBIAN/control
+RUN sed -i "s/SUPPORTED_ARCHITECTURES/$ARCH/" /output/DEBIAN/control
+
+RUN chmod 755 /output/usr/bin/deno
+RUN dpkg-deb --build /output /deno_${FULL_VERSION}.deb

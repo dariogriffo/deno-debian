@@ -1,0 +1,8 @@
+Section: devel
+Priority: optional
+Maintainer: Dario Griffo <dariogriffo@gmail.com>
+Homepage: https://deno.land/
+Package: deno
+Version: DENO_VERSION-BUILD_VERSION+DIST
+Architecture: SUPPORTED_ARCHITECTURES
+Description: Deno is a secure JavaScript and TypeScript runtime built with V8 and Rust.

@@ -1,0 +1,8 @@
+Section: devel
+Priority: optional
+Maintainer: Dario Griffo <dariogriffo@gmail.com>
+Homepage: https://deno.land/
+Package: denort
+Version: DENO_VERSION-BUILD_VERSION+DIST
+Architecture: SUPPORTED_ARCHITECTURES
+Description: denort is the Deno runtime without compiler tooling, optimized for running pre-compiled Deno programs.

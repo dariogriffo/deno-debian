@@ -39,7 +39,7 @@ build_architecture() {
 
     echo "Building for architecture: $build_arch using $release_arch"
 
-    declare -a arr=("jammy" "noble" "questing")
+    declare -a arr=("jammy" "noble" "questing" "resolute")
 
     for dist in "${arr[@]}"; do
         FULL_VERSION="$DENO_VERSION-${BUILD_VERSION}+${dist}_${build_arch}_ubu"

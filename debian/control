@@ -1,0 +1,22 @@
+Source: deno
+Section: utils
+Priority: optional
+Maintainer: Dario Griffo <dariogriffo@gmail.com>
+Build-Depends: debhelper-compat (= 13), wget, ca-certificates, unzip
+Standards-Version: 4.6.2
+Homepage: https://github.com/denoland/deno
+Rules-Requires-Root: no
+
+Package: deno
+Architecture: amd64 arm64
+Depends: ${misc:Depends}
+Description: A modern runtime for JavaScript and TypeScript
+ Deno is a simple, modern and secure runtime for JavaScript, TypeScript,
+ and WebAssembly that uses V8 and is built in Rust.
+
+Package: denort
+Architecture: amd64 arm64
+Depends: ${misc:Depends}
+Description: Deno runtime without the tooling (denort)
+ denort is the lean Deno runtime binary, without the bundled tooling,
+ intended for running pre-bundled Deno programs in production.

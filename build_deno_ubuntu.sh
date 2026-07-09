@@ -42,7 +42,7 @@ build_architecture() {
     declare -a arr=("jammy" "noble" "questing" "resolute")
 
     for dist in "${arr[@]}"; do
-        FULL_VERSION="$DENO_VERSION-${BUILD_VERSION}+${dist}_${build_arch}_ubu"
+        FULL_VERSION="$DENO_VERSION-${BUILD_VERSION}~${dist}_${build_arch}_ubu"
         echo "  Building deno $FULL_VERSION"
 
         rm -f deno "deno-${release_arch}.zip"

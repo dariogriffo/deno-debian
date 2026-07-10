@@ -14,6 +14,8 @@ RUN mkdir -p /output/usr/share/doc/deno/
 COPY deno /output/usr/bin/deno
 
 COPY packages/deno/output/DEBIAN/control /output/DEBIAN/
+COPY packages/deno/output/DEBIAN/postinst /output/DEBIAN/postinst
+RUN chmod 755 /output/DEBIAN/postinst
 COPY packages/deno/output/changelog.Debian /output/usr/share/doc/deno/
 COPY packages/deno/output/copyright /output/usr/share/doc/deno/
 

@@ -14,6 +14,8 @@ RUN mkdir -p /output/usr/share/doc/denort/
 COPY denort /output/usr/bin/denort
 
 COPY packages/denort/output/DEBIAN/control /output/DEBIAN/
+COPY packages/denort/output/DEBIAN/postinst /output/DEBIAN/postinst
+RUN chmod 755 /output/DEBIAN/postinst
 COPY packages/denort/output/changelog.Debian /output/usr/share/doc/denort/
 COPY packages/denort/output/copyright /output/usr/share/doc/denort/
 

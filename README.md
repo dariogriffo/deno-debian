@@ -52,6 +52,8 @@ The Deno runtime without compiler tooling, optimized for running pre-compiled De
 
 ## Install/Update
 
+📖 **Step-by-step install guide:** [Debian](https://debian.griffo.io/install-latest-deno-in-debian.html) · [Ubuntu](https://debian.griffo.io/install-latest-deno-in-ubuntu.html)
+
 ### The Debian way
 
 ```sh

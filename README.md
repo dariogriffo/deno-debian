@@ -52,7 +52,7 @@ The Deno runtime without compiler tooling, optimized for running pre-compiled De
 
 ### The Debian way
 
-> ⚠️ **From 1 October 2026, apt access requires a yearly subscription**
+> ⚠️ **apt access requires a yearly subscription**
 > ([deb.griffo.io](https://deb.griffo.io)). To use this tool for free, download
 > the .deb from the [Releases](https://github.com/dariogriffo/deno-debian/releases) page
 > and install it manually (see below).

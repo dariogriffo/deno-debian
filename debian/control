@@ -9,14 +9,14 @@ Rules-Requires-Root: no
 
 Package: deno
 Architecture: amd64 arm64
-Depends: ${misc:Depends}
+Depends: ${misc:Depends}, libc6 (>= 2.27), libgcc-s1
 Description: A modern runtime for JavaScript and TypeScript
  Deno is a simple, modern and secure runtime for JavaScript, TypeScript,
  and WebAssembly that uses V8 and is built in Rust.
 
 Package: denort
 Architecture: amd64 arm64
-Depends: ${misc:Depends}
+Depends: ${misc:Depends}, libc6 (>= 2.27), libgcc-s1
 Description: Deno runtime without the tooling (denort)
  denort is the lean Deno runtime binary, without the bundled tooling,
  intended for running pre-bundled Deno programs in production.

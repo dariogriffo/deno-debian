@@ -5,4 +5,5 @@ Homepage: https://deno.land/
 Package: deno
 Version: DENO_VERSION-BUILD_VERSION~griffo
 Architecture: SUPPORTED_ARCHITECTURES
+Depends: libc6 (>= 2.27), libgcc-s1
 Description: Deno is a secure JavaScript and TypeScript runtime built with V8 and Rust.

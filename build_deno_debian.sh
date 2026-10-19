@@ -39,62 +39,59 @@ build_architecture() {
 
     echo "Building for architecture: $build_arch using $release_arch"
 
-    declare -a arr=("bookworm" "trixie" "forky" "sid")
+    # One deno and one denort per architecture for every suite: upstream ships
+    # one binary each, so only the old ~<suite> version suffix ever differed.
+    # The fixed ~griffo keeps them below the distro's own build of the version.
+    FULL_VERSION="$DENO_VERSION-${BUILD_VERSION}~griffo_${build_arch}"
+    echo "  Building deno $FULL_VERSION"
 
-    for dist in "${arr[@]}"; do
-        FULL_VERSION="$DENO_VERSION-${BUILD_VERSION}~${dist}_${build_arch}"
-        echo "  Building deno $FULL_VERSION"
+    rm -f deno "deno-${release_arch}.zip"
+    if ! wget "https://github.com/denoland/deno/releases/download/v${DENO_VERSION}/deno-${release_arch}.zip"; then
+        echo "❌ Failed to download deno binary for $build_arch"
+        return 1
+    fi
+    unzip -o "deno-${release_arch}.zip"
+    rm -f "deno-${release_arch}.zip"
 
-        rm -f deno "deno-${release_arch}.zip"
-        if ! wget "https://github.com/denoland/deno/releases/download/v${DENO_VERSION}/deno-${release_arch}.zip"; then
-            echo "❌ Failed to download deno binary for $build_arch"
-            return 1
-        fi
-        unzip -o "deno-${release_arch}.zip"
-        rm -f "deno-${release_arch}.zip"
-
-        if ! docker build . -f deno_Dockerfile -t "deno-$dist-$build_arch" \
-            --build-arg DENO_VERSION="$DENO_VERSION" \
-            --build-arg DEBIAN_DIST="$dist" \
-            --build-arg BUILD_VERSION="$BUILD_VERSION" \
-            --build-arg FULL_VERSION="$FULL_VERSION" \
-            --build-arg ARCH="$build_arch"; then
-            echo "❌ Failed to build Docker image for deno $dist on $build_arch"
-            rm -f deno
-            return 1
-        fi
-
-        id="$(docker create "deno-$dist-$build_arch")"
-        docker cp "$id:/deno_$FULL_VERSION.deb" - > "./deno_$FULL_VERSION.deb"
-        tar -xf "./deno_$FULL_VERSION.deb"
+    if ! docker build . -f deno_Dockerfile -t "deno-$build_arch" \
+        --build-arg DENO_VERSION="$DENO_VERSION" \
+        --build-arg BUILD_VERSION="$BUILD_VERSION" \
+        --build-arg FULL_VERSION="$FULL_VERSION" \
+        --build-arg ARCH="$build_arch"; then
+        echo "❌ Failed to build Docker image for deno on $build_arch"
         rm -f deno
+        return 1
+    fi
 
-        echo "  Building denort $FULL_VERSION"
+    id="$(docker create "deno-$build_arch")"
+    docker cp "$id:/deno_$FULL_VERSION.deb" - > "./deno_$FULL_VERSION.deb"
+    tar -xf "./deno_$FULL_VERSION.deb"
+    rm -f deno
 
-        rm -f denort "denort-${release_arch}.zip"
-        if ! wget "https://github.com/denoland/deno/releases/download/v${DENO_VERSION}/denort-${release_arch}.zip"; then
-            echo "❌ Failed to download denort binary for $build_arch"
-            return 1
-        fi
-        unzip -o "denort-${release_arch}.zip"
-        rm -f "denort-${release_arch}.zip"
+    echo "  Building denort $FULL_VERSION"
 
-        if ! docker build . -f denort_Dockerfile -t "denort-$dist-$build_arch" \
-            --build-arg DENO_VERSION="$DENO_VERSION" \
-            --build-arg DEBIAN_DIST="$dist" \
-            --build-arg BUILD_VERSION="$BUILD_VERSION" \
-            --build-arg FULL_VERSION="$FULL_VERSION" \
-            --build-arg ARCH="$build_arch"; then
-            echo "❌ Failed to build Docker image for denort $dist on $build_arch"
-            rm -f denort
-            return 1
-        fi
+    rm -f denort "denort-${release_arch}.zip"
+    if ! wget "https://github.com/denoland/deno/releases/download/v${DENO_VERSION}/denort-${release_arch}.zip"; then
+        echo "❌ Failed to download denort binary for $build_arch"
+        return 1
+    fi
+    unzip -o "denort-${release_arch}.zip"
+    rm -f "denort-${release_arch}.zip"
 
-        id="$(docker create "denort-$dist-$build_arch")"
-        docker cp "$id:/denort_$FULL_VERSION.deb" - > "./denort_$FULL_VERSION.deb"
-        tar -xf "./denort_$FULL_VERSION.deb"
+    if ! docker build . -f denort_Dockerfile -t "denort-$build_arch" \
+        --build-arg DENO_VERSION="$DENO_VERSION" \
+        --build-arg BUILD_VERSION="$BUILD_VERSION" \
+        --build-arg FULL_VERSION="$FULL_VERSION" \
+        --build-arg ARCH="$build_arch"; then
+        echo "❌ Failed to build Docker image for denort on $build_arch"
         rm -f denort
-    done
+        return 1
+    fi
+
+    id="$(docker create "denort-$build_arch")"
+    docker cp "$id:/denort_$FULL_VERSION.deb" - > "./denort_$FULL_VERSION.deb"
+    tar -xf "./denort_$FULL_VERSION.deb"
+    rm -f denort
 
     echo "✅ Successfully built for $build_arch"
     return 0

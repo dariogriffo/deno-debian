@@ -1,4 +1,4 @@
-deno (BUILD_VERSION) DIST; urgency=low
+deno (BUILD_VERSION) stable; urgency=low
 
   * https://github.com/denoland/deno/releases
 
